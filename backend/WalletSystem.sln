@@ -23,6 +23,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WalletSystem.Demo.Daemon", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WalletSystem.Demo.Client", "WalletSystem.Demo.Client\WalletSystem.Demo.Client.csproj", "{4070953F-3A48-4D17-90E2-6FB80DE46B0E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WalletSystem.Worker.EventListeners", "WalletSystem.Worker.EventListeners\WalletSystem.Worker.EventListeners.csproj", "{75AA1686-7EFC-4865-A897-943D7B0E23C3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WalletSystem.Worker.Mail", "WalletSystem.Worker.Mail\WalletSystem.Worker.Mail.csproj", "{0DCC27F6-CBEF-40E7-87FA-108CF084B06E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,6 +69,14 @@ Global
 		{4070953F-3A48-4D17-90E2-6FB80DE46B0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4070953F-3A48-4D17-90E2-6FB80DE46B0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4070953F-3A48-4D17-90E2-6FB80DE46B0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75AA1686-7EFC-4865-A897-943D7B0E23C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75AA1686-7EFC-4865-A897-943D7B0E23C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75AA1686-7EFC-4865-A897-943D7B0E23C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75AA1686-7EFC-4865-A897-943D7B0E23C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DCC27F6-CBEF-40E7-87FA-108CF084B06E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DCC27F6-CBEF-40E7-87FA-108CF084B06E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DCC27F6-CBEF-40E7-87FA-108CF084B06E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DCC27F6-CBEF-40E7-87FA-108CF084B06E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -79,5 +91,7 @@ Global
 		{AF24E242-E3CD-4221-BE64-8E47C7597D54} = {BB00D980-1F8A-4FED-81E4-EFCF82EC372D}
 		{0451A260-4FA3-4E2E-9595-B3C1FD376C5A} = {BB00D980-1F8A-4FED-81E4-EFCF82EC372D}
 		{4070953F-3A48-4D17-90E2-6FB80DE46B0E} = {BB00D980-1F8A-4FED-81E4-EFCF82EC372D}
+		{75AA1686-7EFC-4865-A897-943D7B0E23C3} = {BB00D980-1F8A-4FED-81E4-EFCF82EC372D}
+		{0DCC27F6-CBEF-40E7-87FA-108CF084B06E} = {BB00D980-1F8A-4FED-81E4-EFCF82EC372D}
 	EndGlobalSection
 EndGlobal

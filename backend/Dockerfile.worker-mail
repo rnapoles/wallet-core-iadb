@@ -24,12 +24,11 @@ RUN --mount=type=cache,id=nuget,target=/root/.nuget/packages \
 # Copy everything else
 COPY . .
 
-# 2. Skip redundant intermediate "dotnet build" and compile via publish directly
-# 3. Reuse the NuGet cache mount and skip dependency evaluation checks using --no-restore
+# 2. Publish Worker.Mail directly using cache mounts and bypassing redundant build targets
 RUN --mount=type=cache,id=nuget,target=/root/.nuget/packages \
-    dotnet publish "WalletSystem.Api/WalletSystem.Api.csproj" \
+    dotnet publish "WalletSystem.Worker.Mail/WalletSystem.Worker.Mail.csproj" \
     -c Release \
-    -o /app/publish \
+    -o /app/mail-publish \
     --no-restore \
     /p:UseAppHost=false
 
@@ -37,13 +36,8 @@ RUN --mount=type=cache,id=nuget,target=/root/.nuget/packages \
 FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine AS final
 WORKDIR /app
 
-# 4. Create directory for SQLite database and install curl in a single efficient layer
-RUN mkdir -p /app/data && apk add --no-cache curl
-
-EXPOSE 8080
-EXPOSE 8081
-
 # Copy build artifacts straight from the build stage
-COPY --from=build /app/publish .
+COPY --from=build /app/mail-publish .
 
-ENTRYPOINT ["dotnet", "WalletSystem.Api.dll"]
+# Set entry point to run the mail worker
+ENTRYPOINT ["dotnet", "WalletSystem.Worker.Mail.dll"]

@@ -14,7 +14,8 @@ COPY WalletSystem.Domain/WalletSystem.Domain.csproj WalletSystem.Domain/
 COPY WalletSystem.Infrastructure/WalletSystem.Infrastructure.csproj WalletSystem.Infrastructure/
 COPY WalletSystem.Shared/WalletSystem.Shared.csproj WalletSystem.Shared/
 COPY WalletSystem.Tests/WalletSystem.Tests.csproj WalletSystem.Tests/
-
+COPY WalletSystem.Worker.EventListeners/WalletSystem.Worker.EventListeners.csproj WalletSystem.Worker.EventListeners/
+COPY WalletSystem.Worker.Mail/WalletSystem.Worker.Mail.csproj WalletSystem.Worker.Mail/
 
 # 1. Restore dependencies using a global NuGet cache mount
 RUN --mount=type=cache,id=nuget,target=/root/.nuget/packages \
