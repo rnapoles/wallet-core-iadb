@@ -72,6 +72,54 @@ services:
       - wallet-network
     restart: unless-stopped
 
+  worker-simple:
+    build:
+      context: ./backend/
+      dockerfile: Dockerfile.worker
+    deploy:
+      replicas: 1
+    env_file:
+      - ./backend/.env
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - RabbitMQSettings__Host=event-bus-server
+      - SmtpSettings__Host=smtp-server
+      - SmtpSettings__Port=1025
+    depends_on:
+      api:
+        condition: service_healthy
+      event-bus-server:
+        condition: service_healthy
+      smtp-server:
+        condition: service_healthy
+    networks:
+      - wallet-network
+    restart: unless-stopped
+
+  worker-mail:
+    build:
+      context: ./backend/
+      dockerfile: Dockerfile.worker-mail
+    deploy:
+      replicas: 1
+    env_file:
+      - ./backend/.env
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - RabbitMQSettings__Host=event-bus-server
+      - SmtpSettings__Host=smtp-server
+      - SmtpSettings__Port=1025
+    depends_on:
+      api:
+        condition: service_healthy
+      event-bus-server:
+        condition: service_healthy
+      smtp-server:
+        condition: service_healthy
+    networks:
+      - wallet-network
+    restart: unless-stopped
+
   event-bus-server:
     image: rabbitmq:3-management-alpine
     ports:
