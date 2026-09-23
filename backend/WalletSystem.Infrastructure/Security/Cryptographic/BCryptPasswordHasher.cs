@@ -2,7 +2,7 @@ using WalletSystem.Application.Contracts.Services.Security;
 
 namespace WalletSystem.Infrastructure.Security.Cryptographic;
 
-public class PasswordHasher : IPasswordHasher
+public class BCryptPasswordHasher : IPasswordHasher
 {
     public string HashPassword(string password)
     {

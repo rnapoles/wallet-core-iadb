@@ -15,7 +15,7 @@ public static class SecurityAuthenticationExtensions
         
         // Register Application Services
         services.AddScoped<IJwtTokenService, JwtTokenCacheService>();
-        services.AddScoped<IPasswordHasher, PasswordHasher>();
+        services.AddScoped<IPasswordHasher, Argon2IdPasswordHasher>();
         services.AddScoped<ICurrentUserService, CurrentUserService>();
         
         var jwtSettings = configuration.GetSection("JwtSettings");
