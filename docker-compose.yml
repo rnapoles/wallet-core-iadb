@@ -38,6 +38,40 @@ services:
       retries: 5
       start_period: 30s
 
+  demo-http:
+    build:
+      context: ./backend/
+      dockerfile: Dockerfile.demo
+    env_file:
+      - ./backend/.env
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - wallet-network
+    command: ["http://api:8080/"]
+
+  demo-daemon:
+    build:
+      context: ./backend/
+      dockerfile: Dockerfile.daemon
+    env_file:
+      - ./backend/.env
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - DaemonSettings__ApiBaseUrl=http://api:8080/
+      - DaemonSettings__MinIntervalSeconds=5
+      - DaemonSettings__MaxIntervalSeconds=20
+      - DaemonSettings__ThreadCount=4
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - wallet-network
+    restart: unless-stopped
+
   event-bus-server:
     image: rabbitmq:3-management-alpine
     ports:
