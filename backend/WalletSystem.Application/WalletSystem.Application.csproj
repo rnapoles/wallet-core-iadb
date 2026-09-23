@@ -20,7 +20,6 @@
   <ItemGroup>
     <!-- Application depends ONLY on Domain (Clean Architecture: Application -> Domain) -->
     <ProjectReference Include="..\WalletSystem.Domain\WalletSystem.Domain.csproj" />
-    <ProjectReference Include="..\WalletSystem.Shared\WalletSystem.Shared.csproj" />
   </ItemGroup>
 
 </Project>
