@@ -1,0 +1,145 @@
+services:
+
+  api:
+    build:
+      context: ./backend/
+      dockerfile: Dockerfile.api
+    env_file:
+      - ./backend/.env
+    ports:
+      - "5000:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Data Source=/app/data/walletsystem.db
+      - Cache__Provider=Redis
+      - RabbitMQSettings__Host=event-bus-server
+      - RedisSettings__ConnectionString=cache-server:6379
+      - SmtpSettings__Host=smtp-server
+      - SmtpSettings__Port=1025
+    depends_on:
+      event-bus-server:
+        condition: service_healthy
+      cache-server:
+        condition: service_healthy
+      smtp-server:
+        condition: service_healthy
+      db-server:
+        condition: service_healthy
+      log-server:
+        condition: service_healthy
+    volumes:
+      - ./data:/app/data
+    networks:
+      - wallet-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  event-bus-server:
+    image: rabbitmq:3-management-alpine
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - wallet-network
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  cache-server:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - wallet-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  smtp-server:
+    image: axllent/mailpit:latest
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    volumes:
+      - mailpit_data:/data
+    networks:
+      - wallet-network
+    environment:
+      - MP_MAX_MESSAGES=5000
+      - MP_DATA_FILE=/data/mailpit.db
+    healthcheck:
+      test: ["CMD", "/mailpit", "readyz"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+  # Optional: MySQL database (uncomment to use instead of SQLite)
+  db-server:
+    image: mysql:8.0
+    # ports:
+      # - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=YourSecurePassword123!
+      - MYSQL_DATABASE=wallet-system
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/mysql/sql:/docker-entrypoint-initdb.d
+    networks:
+      - wallet-network
+    healthcheck:
+      #test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$$MYSQL_ROOT_PASSWORD && mysql -u root -p$$MYSQL_ROOT_PASSWORD -e 'USE `wallet-system`;'"]
+      start_period: 1m
+      start_interval: 10s
+      interval: 1m
+      timeout: 5s
+      retries: 3
+
+  log-server:
+    image: datalust/seq:latest
+    container_name: seq
+    environment:
+      - ACCEPT_EULA=Y
+      - SEQ_FIRSTRUN_ADMINPASSWORD=/*theP@55w0rd*/
+    ports:
+      #- "5341:5341"
+      - "8081:80"
+    volumes:
+      - seq-data:/data
+    networks:
+      - wallet-network
+    healthcheck:
+      test: ["CMD", "/seqsvr/Client/seqcli", "node", "health", "-s", "http://localhost"]
+      start_period: 1m
+      start_interval: 10s
+      interval: 1m
+      timeout: 5s
+      retries: 3
+
+volumes:
+  sqlite_data:
+  rabbitmq_data:
+  redis_data:
+  mailpit_data:
+  mysql_data:
+  seq-data:
+
+networks:
+  wallet-network:
+    driver: bridge
