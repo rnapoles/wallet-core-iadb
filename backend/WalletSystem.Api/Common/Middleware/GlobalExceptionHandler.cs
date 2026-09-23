@@ -38,11 +38,22 @@ public static class GlobalExceptionHandler
         context.Response.StatusCode = statusCode;
         context.Response.ContentType = "application/json";
 
+        // Checks both common variables used by .NET hosting
+        string? environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") 
+                              ?? Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT");
+
+        var message = "An unexpected error occurred.";
+        if (environment == "Testing" || environment == "Test")
+        {
+            message = exception?.Message ?? message;
+        }
+        
         var response = new
         {
             success = false,
             code = statusCode,
-            message = "An unexpected error occurred." // Never report API Information
+            //message = "An unexpected error occurred." // Never report API Information
+              message = message
         };
 
         await context.Response.WriteAsJsonAsync(response);

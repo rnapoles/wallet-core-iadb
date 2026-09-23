@@ -10,6 +10,7 @@
     <!-- Infrastructure depends on Application and Domain -->
     <ProjectReference Include="..\WalletSystem.Application\WalletSystem.Application.csproj" />
     <ProjectReference Include="..\WalletSystem.Domain\WalletSystem.Domain.csproj" />
+    <ProjectReference Include="..\WalletSystem.Shared\WalletSystem.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>
