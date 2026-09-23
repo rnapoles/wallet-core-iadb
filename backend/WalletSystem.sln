@@ -17,6 +17,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WalletSystem.Shared", "Wall
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WalletSystem.Tests", "WalletSystem.Tests\WalletSystem.Tests.csproj", "{C355FF6F-28CC-4446-930F-3E701B7C4989}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WalletSystem.Demo.Shared", "WalletSystem.Demo.Shared\WalletSystem.Demo.Shared.csproj", "{AF24E242-E3CD-4221-BE64-8E47C7597D54}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WalletSystem.Demo.Daemon", "WalletSystem.Demo.Daemon\WalletSystem.Demo.Daemon.csproj", "{0451A260-4FA3-4E2E-9595-B3C1FD376C5A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +51,14 @@ Global
 		{C355FF6F-28CC-4446-930F-3E701B7C4989}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C355FF6F-28CC-4446-930F-3E701B7C4989}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C355FF6F-28CC-4446-930F-3E701B7C4989}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF24E242-E3CD-4221-BE64-8E47C7597D54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF24E242-E3CD-4221-BE64-8E47C7597D54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF24E242-E3CD-4221-BE64-8E47C7597D54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF24E242-E3CD-4221-BE64-8E47C7597D54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0451A260-4FA3-4E2E-9595-B3C1FD376C5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0451A260-4FA3-4E2E-9595-B3C1FD376C5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0451A260-4FA3-4E2E-9595-B3C1FD376C5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0451A260-4FA3-4E2E-9595-B3C1FD376C5A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -58,5 +70,7 @@ Global
 		{C67C4BAC-B154-4F07-950A-08C272F3C9CA} = {BB00D980-1F8A-4FED-81E4-EFCF82EC372D}
 		{0D5F4116-D8A2-4DEB-B60F-6896570F2D94} = {BB00D980-1F8A-4FED-81E4-EFCF82EC372D}
 		{C355FF6F-28CC-4446-930F-3E701B7C4989} = {BB00D980-1F8A-4FED-81E4-EFCF82EC372D}
+		{AF24E242-E3CD-4221-BE64-8E47C7597D54} = {BB00D980-1F8A-4FED-81E4-EFCF82EC372D}
+		{0451A260-4FA3-4E2E-9595-B3C1FD376C5A} = {BB00D980-1F8A-4FED-81E4-EFCF82EC372D}
 	EndGlobalSection
 EndGlobal

@@ -1,6 +1,7 @@
 using Serilog;
 using WalletSystem.Api.Common.Middleware;
 using WalletSystem.Api.Settings.Extensions;
+using WalletSystem.Shared.Settings.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 

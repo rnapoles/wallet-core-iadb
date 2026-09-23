@@ -7,6 +7,8 @@ WORKDIR /src
 COPY *.sln ./
 COPY WalletSystem.Api/WalletSystem.Api.csproj WalletSystem.Api/
 COPY WalletSystem.Application/WalletSystem.Application.csproj WalletSystem.Application/
+COPY WalletSystem.Demo.Daemon/WalletSystem.Demo.Daemon.csproj WalletSystem.Demo.Daemon/
+COPY WalletSystem.Demo.Shared/WalletSystem.Demo.Shared.csproj WalletSystem.Demo.Shared/
 COPY WalletSystem.Domain/WalletSystem.Domain.csproj WalletSystem.Domain/
 COPY WalletSystem.Infrastructure/WalletSystem.Infrastructure.csproj WalletSystem.Infrastructure/
 COPY WalletSystem.Shared/WalletSystem.Shared.csproj WalletSystem.Shared/

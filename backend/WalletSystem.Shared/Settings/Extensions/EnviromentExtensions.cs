@@ -1,4 +1,6 @@
-﻿namespace WalletSystem.Api.Settings.Extensions;
+﻿using Microsoft.Extensions.Configuration;
+
+namespace WalletSystem.Shared.Settings.Extensions;
 
 /// <summary>
 /// Extension methods for adding .env file configuration to IConfigurationBuilder.
