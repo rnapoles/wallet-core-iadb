@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="11.12.0" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.12.0" />
+    <PackageReference Include="MassTransit" Version="8.5.10" />
+    <PackageReference Include="MediatR" Version="12.5.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.12" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.12" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.7.3" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.7.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Application depends ONLY on Domain (Clean Architecture: Application -> Domain) -->
+    <ProjectReference Include="..\WalletSystem.Domain\WalletSystem.Domain.csproj" />
+    <ProjectReference Include="..\WalletSystem.Shared\WalletSystem.Shared.csproj" />
+  </ItemGroup>
+
+</Project>
