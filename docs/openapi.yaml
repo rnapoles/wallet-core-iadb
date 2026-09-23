@@ -1,0 +1,608 @@
+openapi: 3.0.3
+info:
+  title: Wallet System API
+  description: |
+    A RESTful API for managing user accounts, multiple wallets, and transactions.
+    
+    ## Features
+    - User registration and login with JWT authentication
+    - Multiple wallets per account with different currencies
+    - Deposits, withdrawals, and transfers between wallets
+    - Transaction history tracking
+    - Pessimistic locking for transactional integrity
+    
+    ## Authentication
+    Most endpoints require a JWT token obtained from the `/api/auth/login` endpoint.
+    Include the token in the Authorization header as `Bearer {token}`.
+  version: 1.0.0
+  contact:
+    name: Wallet System Support
+    email: support@walletsystem.com
+
+servers:
+  - url: http://localhost:5000
+    description: Development server
+  - url: https://api.walletsystem.com
+    description: Production server
+
+tags:
+  - name: Authentication
+    description: User registration and login operations
+  - name: Wallets
+    description: Wallet management operations
+  - name: Transactions
+    description: Deposit, withdrawal, and transfer operations
+
+paths:
+  /api/auth/register:
+    post:
+      tags:
+        - Authentication
+      summary: Register a new user account
+      description: Creates a new user account with the provided credentials
+      operationId: registerUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterUserRequest'
+      responses:
+        '200':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterUserResponse'
+        '400':
+          description: Invalid input or user already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: Login and receive JWT token
+      description: Authenticates user and returns a JWT token
+      operationId: loginUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginUserRequest'
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginUserResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/wallets:
+    post:
+      tags:
+        - Wallets
+      summary: Create a new wallet
+      description: Creates a new wallet for the authenticated user
+      operationId: createWallet
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWalletRequest'
+      responses:
+        '200':
+          description: Wallet created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletDto'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    get:
+      tags:
+        - Wallets
+      summary: Get all user wallets
+      description: Retrieves all wallets belonging to the authenticated user
+      operationId: getUserWallets
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: List of user wallets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WalletDto'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/wallets/{id}:
+    get:
+      tags:
+        - Wallets
+      summary: Get wallet by ID
+      description: Retrieves a specific wallet by its ID
+      operationId: getWalletById
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The wallet ID
+      responses:
+        '200':
+          description: Wallet details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletDto'
+        '404':
+          description: Wallet not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/transactions/deposit:
+    post:
+      tags:
+        - Transactions
+      summary: Deposit funds
+      description: Deposits funds into a specified wallet
+      operationId: depositFunds
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DepositRequest'
+      responses:
+        '200':
+          description: Deposit successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+        '400':
+          description: Invalid input or insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/transactions/withdraw:
+    post:
+      tags:
+        - Transactions
+      summary: Withdraw funds
+      description: Withdraws funds from a specified wallet
+      operationId: withdrawFunds
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WithdrawRequest'
+      responses:
+        '200':
+          description: Withdrawal successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+        '400':
+          description: Invalid input or insufficient balance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/transactions/transfer:
+    post:
+      tags:
+        - Transactions
+      summary: Transfer funds
+      description: Transfers funds between two wallets
+      operationId: transferFunds
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferRequest'
+      responses:
+        '200':
+          description: Transfer successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+        '400':
+          description: Invalid input or insufficient balance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/transactions/wallet/{walletId}:
+    get:
+      tags:
+        - Transactions
+      summary: Get wallet transactions
+      description: Retrieves all transactions for a specific wallet
+      operationId: getWalletTransactions
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: walletId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The wallet ID
+      responses:
+        '200':
+          description: List of transactions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TransactionDto'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/transactions/{id}:
+    get:
+      tags:
+        - Transactions
+      summary: Get transaction by ID
+      description: Retrieves a specific transaction by its ID
+      operationId: getTransactionById
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The transaction ID
+      responses:
+        '200':
+          description: Transaction details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionDto'
+        '404':
+          description: Transaction not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Enter your JWT token
+
+  schemas:
+    RegisterUserRequest:
+      type: object
+      required:
+        - email
+        - password
+        - firstName
+        - lastName
+      properties:
+        email:
+          type: string
+          format: email
+          example: user@example.com
+        password:
+          type: string
+          format: password
+          minLength: 6
+          example: SecurePass123!
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: Doe
+
+    RegisterUserResponse:
+      type: object
+      properties:
+        userId:
+          type: string
+          format: uuid
+        email:
+          type: string
+        message:
+          type: string
+
+    LoginUserRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: user@example.com
+        password:
+          type: string
+          format: password
+          example: SecurePass123!
+
+    LoginUserResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: JWT access token
+        expiresAt:
+          type: string
+          format: date-time
+        user:
+          $ref: '#/components/schemas/UserDto'
+
+    UserDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+
+    CreateWalletRequest:
+      type: object
+      required:
+        - currency
+      properties:
+        currency:
+          type: string
+          pattern: '^[A-Z]{3}$'
+          example: USD
+          description: ISO 4217 currency code
+
+    WalletDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        userId:
+          type: string
+          format: uuid
+        currency:
+          type: string
+          example: USD
+        balance:
+          type: number
+          format: decimal
+          example: 1000.00
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    DepositRequest:
+      type: object
+      required:
+        - walletId
+        - amount
+        - reference
+      properties:
+        walletId:
+          type: string
+          format: uuid
+        amount:
+          type: number
+          format: decimal
+          minimum: 0.01
+          example: 100.00
+        reference:
+          type: string
+          example: DEP-12345
+
+    WithdrawRequest:
+      type: object
+      required:
+        - walletId
+        - amount
+        - reference
+      properties:
+        walletId:
+          type: string
+          format: uuid
+        amount:
+          type: number
+          format: decimal
+          minimum: 0.01
+          example: 50.00
+        reference:
+          type: string
+          example: WDR-12345
+
+    TransferRequest:
+      type: object
+      required:
+        - sourceWalletId
+        - destinationWalletId
+        - amount
+        - reference
+      properties:
+        sourceWalletId:
+          type: string
+          format: uuid
+        destinationWalletId:
+          type: string
+          format: uuid
+        amount:
+          type: number
+          format: decimal
+          minimum: 0.01
+          example: 25.00
+        reference:
+          type: string
+          example: TRF-12345
+
+    TransactionResponse:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum: [Deposit, Withdrawal, Transfer]
+        status:
+          type: string
+          enum: [Completed, Pending, Failed]
+        amount:
+          type: number
+          format: decimal
+        walletId:
+          type: string
+          format: uuid
+        newBalance:
+          type: number
+          format: decimal
+        reference:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+
+    TransactionDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum: [Deposit, Withdrawal, Transfer]
+        amount:
+          type: number
+          format: decimal
+        currency:
+          type: string
+        walletId:
+          type: string
+          format: uuid
+        reference:
+          type: string
+        status:
+          type: string
+          enum: [Completed, Pending, Failed]
+        createdAt:
+          type: string
+          format: date-time
+
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Error message describing what went wrong
+        details:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
