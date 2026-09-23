@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using StackExchange.Redis;
+using WalletSystem.Api.Settings;
 using WalletSystem.Application.Contracts.Services.Cache;
 using WalletSystem.Application.Contracts.Services.HealthCheck;
 using WalletSystem.Application.Contracts.Services.Id;
@@ -23,8 +24,10 @@ public static class InfrastructureServiceExtensions
     public static IServiceCollection AddInfrastructureServices(
         this IServiceCollection services,
         IConfiguration configuration,
-        IWebHostEnvironment environment)
+        IWebHostEnvironment environment,
+        ApiConfiguration apiConfiguration)
     {
+        ArgumentNullException.ThrowIfNull(apiConfiguration);
         
         // Register using the simplified, non-generic contract interface
         services.AddSingleton<IIdGenerator, UuidV7IdGenerator>();
@@ -36,8 +39,7 @@ public static class InfrastructureServiceExtensions
         // Register Database Context & IApplicationDbContext
         services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
 
-        var databaseEngine = configuration.GetValue<string>("Database:Engine") ?? "SQLite";
-        var useSqlite = "SQLite".Equals(databaseEngine, StringComparison.OrdinalIgnoreCase);
+        var useSqlite = apiConfiguration.IsSqliteActive;
         
         services.AddDbContext<ApplicationDbContext>(options =>
         {
@@ -70,22 +72,20 @@ public static class InfrastructureServiceExtensions
         // Register Cache Provider based on configuration
         services.AddSingleton<CacheFactory>();
         
-        var cacheProvider = configuration.GetValue<string>("Cache:Provider") ?? "Redis";
-        
-        if (cacheProvider.Equals("Memory", StringComparison.OrdinalIgnoreCase))
+        if (apiConfiguration.IsInMemoryCacheActive)
         {
             // Register Memory Cache for health checks and application use
             services.AddMemoryCache();
             services.AddSingleton<ICacheProvider, InMemoryCacheProvider>();
         }
-        else if (cacheProvider.Equals("File", StringComparison.OrdinalIgnoreCase))
+        else if (apiConfiguration.IsFileCacheActive)
         {
             // Register File-based cache for local development
             var cacheDirectory = configuration.GetValue<string>("Cache:FileDirectory");
             services.AddSingleton<ICacheProvider>(sp => 
                 new FileCacheProvider(cacheDirectory, sp.GetRequiredService<ILogger<FileCacheProvider>>()));
         }
-        else if (cacheProvider.Equals("Memcached", StringComparison.OrdinalIgnoreCase))
+        else if (apiConfiguration.IsMemcachedCacheActive)
         {
             // Register Memcached client via EnyimMemcachedCore
             services.AddEnyimMemcached(options =>

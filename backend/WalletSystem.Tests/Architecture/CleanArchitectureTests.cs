@@ -1,5 +1,5 @@
 using System.Reflection;
-using WalletSystem.Api.Controllers.Auth;
+using WalletSystem.Api.Endpoints;
 using WalletSystem.Application.Contracts.Services.Persistence;
 using WalletSystem.Domain.Entities.Users;
 using WalletSystem.Infrastructure.Persistence;
@@ -19,7 +19,7 @@ public class CleanArchitectureTests
         _domainAssembly = typeof(User).Assembly;
         _applicationAssembly = typeof(IApplicationDbContext).Assembly;
         _infrastructureAssembly = typeof(ApplicationDbContext).Assembly;
-        _apiAssembly = typeof(AuthLoginController).Assembly;
+        _apiAssembly = typeof(AuthEndpoints).Assembly;
     }
 
     [Fact]

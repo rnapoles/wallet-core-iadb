@@ -1,4 +1,5 @@
 using MassTransit;
+using WalletSystem.Api.Settings;
 using WalletSystem.Infrastructure.Persistence;
 
 namespace WalletSystem.Api.Settings.Extensions;
@@ -7,15 +8,14 @@ public static class MessagingExtensions
 {
     public static IServiceCollection AddMessagingServices(
         this IServiceCollection services,
-        IConfiguration configuration)
+        IConfiguration configuration,
+        ApiConfiguration apiConfiguration)
     {
-        
-        // Get (MySQL or SQLite)
-        var databaseEngine = configuration.GetValue<string>("Database:Engine") ?? "SQLite";
-        var useSqlite = "SQLite".Equals(databaseEngine, StringComparison.OrdinalIgnoreCase);
-        
-        // Get messaging mode (RabbitMQ or InMemory)
-        var messagingMode = configuration.GetValue<string>("Messaging:Mode") ?? "InMemory";
+        ArgumentNullException.ThrowIfNull(apiConfiguration);
+
+        // Database engine and event-bus transport are read once by ApiConfiguration,
+        // registered as a singleton after AddEnvironmentFile/AddEnvironmentVariables.
+        var useSqlite = apiConfiguration.IsSqliteActive;
 
         // Configure MassTransit with Outbox Pattern
         services.AddMassTransit(x =>
@@ -24,7 +24,7 @@ public static class MessagingExtensions
             // Turn off anonymous data collection
             x.DisableUsageTelemetry();
 
-            if (messagingMode.Equals("RabbitMQ", StringComparison.OrdinalIgnoreCase))
+            if (apiConfiguration.IsRabbitMqEventBusActive)
             {
                 x.UsingRabbitMq((context, cfg) =>
                 {
