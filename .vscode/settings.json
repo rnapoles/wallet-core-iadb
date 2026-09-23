@@ -1,0 +1,36 @@
+{
+  "rest-client.environmentVariables": {
+    "dev": {
+      "baseUrl1": "http://localhost:5000",
+      "token1": "your-dev-token-here",
+      "testEmail": "test@example.com",
+      "testPassword": "SecurePass123!",
+      "testFirstName": "John",
+      "testLastName": "Doe",
+      "walletCurrency": "USD",
+      "walletId1": "",
+      "sourceWalletId": "",
+      "destinationWalletId": "",
+      "transactionId": "",
+      "depositAmount": "100.00",
+      "withdrawAmount": "50.00",
+      "transferAmount": "25.00"
+    },
+    "prod": {
+      "baseUrl1": "https://api.walletsystem.com",
+      "token1": "your-prod-token-here",
+      "testEmail": "user@example.com",
+      "testPassword": "YourSecurePassword!",
+      "testFirstName": "Jane",
+      "testLastName": "Smith",
+      "walletCurrency": "EUR",
+      "walletId1": "",
+      "sourceWalletId": "",
+      "destinationWalletId": "",
+      "transactionId": "",
+      "depositAmount": "100.00",
+      "withdrawAmount": "50.00",
+      "transferAmount": "25.00"
+    }
+  }
+}

@@ -1,0 +1,118 @@
+# Wallet System API - HTTP Requests for VS Code REST Client
+# This file supports Environment & Test Data Variables
+# Usage: Select environment in VS Code REST Client extension dropdown
+
+#@baseUrl = http://localhost:5000
+@token = {{LoginUser.response.body.token}}
+@walletId = {{CreateWallet.response.body.walletId}}
+@userId = {{LoginUser.response.body.userId}}
+
+
+### Environment Variables
+#@name baseUrl
+#{{baseUrl}}
+
+#@name token
+# {{token}}
+
+###
+# @name RegisterUser
+# Register a new user account
+POST {{baseUrl1}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "{{testEmail}}",
+  "password": "{{testPassword}}",
+  "firstName": "{{testFirstName}}",
+  "lastName": "{{testLastName}}"
+}
+
+###
+# @name LoginUser
+# Login and receive JWT token
+POST {{baseUrl1}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{testEmail}}",
+  "password": "{{testPassword}}"
+}
+
+
+###
+# @name CreateWallet
+# Create a new wallet for the authenticated user
+POST {{baseUrl1}}/api/wallets
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "w-1",
+  "userId": "{{userId}}",
+  "currency": "{{walletCurrency}}"
+}
+
+###
+# @name GetUserWallets
+# Get all wallets for the authenticated user
+GET {{baseUrl1}}/api/wallets
+Authorization: Bearer {{token}}
+
+###
+# @name GetWalletById
+# Get a specific wallet by ID
+GET {{baseUrl1}}/api/wallets/{{walletId}}
+Authorization: Bearer {{token}}
+
+###
+# @name DepositFunds
+# Deposit funds into a wallet
+POST {{baseUrl1}}/api/transactions/deposit
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "walletId": "{{walletId}}",
+  "amount": {{depositAmount}},
+  "reference": "DEP-{{$timestamp}}"
+}
+
+###
+# @name WithdrawFunds
+# Withdraw funds from a wallet
+POST {{baseUrl1}}/api/transactions/withdraw
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "walletId": "{{walletId}}",
+  "amount": {{withdrawAmount}},
+  "reference": "WDR-{{$timestamp}}"
+}
+
+###
+# @name TransferFunds
+# Transfer funds between wallets
+POST {{baseUrl1}}/api/transactions/transfer
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "sourceWalletId": "{{sourceWalletId}}",
+  "destinationWalletId": "{{destinationWalletId}}",
+  "amount": {{transferAmount}},
+  "reference": "TRF-{{$timestamp}}"
+}
+
+###
+# @name GetWalletTransactions
+# Get transaction history for a wallet
+GET {{baseUrl1}}/api/transactions/wallet/{{walletId}}
+Authorization: Bearer {{token}}
+
+###
+# @name GetTransactionById
+# Get a specific transaction by ID
+GET {{baseUrl1}}/api/transactions/{{transactionId}}
+Authorization: Bearer {{token}}
