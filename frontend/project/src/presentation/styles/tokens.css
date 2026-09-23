@@ -1,0 +1,65 @@
+/**
+ * Design tokens.
+ *
+ * Palette: near-black navy ledger background, a cyan signal color reserved
+ * for the single most important number on any screen (the balance), and a
+ * violet used only for the auth hero gradient — never both accents glowing
+ * at once. Hairline borders instead of drop shadows throughout.
+ */
+:root {
+  /* Surfaces */
+  --color-bg: #0a0e14;
+  --color-bg-raised: #0e131c;
+  --color-surface: #121826;
+  --color-surface-hover: #161d2c;
+  --color-border: #232b3d;
+  --color-border-strong: #323e57;
+
+  /* Text */
+  --color-text: #e8ecf3;
+  --color-text-muted: #8a94a8;
+  --color-text-faint: #57617a;
+
+  /* Accents */
+  --color-signal: #5eead4;
+  --color-signal-dim: #3fae9f;
+  --color-violet: #a78bfa;
+  --color-success: #34d399;
+  --color-danger: #f87171;
+  --color-warning: #fbbf24;
+
+  /* Type */
+  --font-display: 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
+  --font-body: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  /* Scale (major third-ish, tuned) */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.375rem;
+  --text-2xl: 1.75rem;
+  --text-3xl: 2.25rem;
+  --text-4xl: 3rem;
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+
+  /* Shape */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+}

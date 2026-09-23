@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="WalletSystem — manage multi-currency wallets, deposits, withdrawals, and transfers." />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta name="color-scheme" content="dark" />
+    <!--
+      Content-Security-Policy (defense in depth against XSS / supply-chain script injection).
+      script-src/style-src intentionally omit 'unsafe-inline' where practical; Vite's dev
+      server injects inline scripts for HMR, so this policy is relaxed automatically in
+      development via vite.config.ts and should be tightened further at the CDN/reverse-proxy
+      level in production (see SECURITY.md).
+    -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self';
+               script-src 'self';
+               style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+               font-src 'self' https://fonts.gstatic.com;
+               img-src 'self' data:;
+               connect-src 'self' https:;
+               object-src 'none';
+               base-uri 'self';
+               frame-ancestors 'none';
+               form-action 'self';
+               upgrade-insecure-requests"
+    />
+    <title>WalletSystem</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

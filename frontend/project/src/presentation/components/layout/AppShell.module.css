@@ -1,0 +1,16 @@
+.shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+  padding: var(--space-7) var(--space-8);
+}
+
+@media (max-width: 768px) {
+  .main {
+    padding: var(--space-5);
+  }
+}

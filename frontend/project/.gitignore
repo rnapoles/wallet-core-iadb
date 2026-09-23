@@ -1,0 +1,38 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Environment files — never commit real secrets/config.
+# .env.example is explicitly allowed so contributors know which variables to set.
+.env
+.env.*.local
+.env.local
+!.env.example
+
+# Coverage / audit artifacts
+coverage
+npm-audit.json
+
+# TypeScript build info
+*.tsbuildinfo
