@@ -390,6 +390,31 @@ If messages fail repeatedly, check the dead-letter queue handled by `Worker.Even
 
 Switch providers via `Cache__Provider` (e.g., `Memory` to run without Redis). Use `WalletSystem.Samples` to exercise each provider standalone.
 
+## Todo
+
+- [ ] Zero Trust Security and end-to-end HTTPS.
+- [ ] Complete Richardson Maturity Model Level 2 and evaluate HATEOAS for Level 3.
+- [ ] Pagination and consistent API response standards.
+- [ ] Role-based and permission-based authorization.
+- [ ] Rate limiting.
+- [ ] Administrative back office.
+- [ ] Elasticsearch or Meilisearch.
+- [ ] Result Pattern and custom domain exceptions.
+- [ ] Aggregate Roots and a richer domain model.
+- [ ] Tell, Don't Ask in entities and aggregates.
+- [ ] EF Core Migrations.
+- [ ] Support for multiple persistence providers, including EF Core and NHibernate.
+- [ ] Improved observability with metrics such as CPU, memory, RPS, latency, and slow queries.
+- [ ] OLAP for statistics, reporting, and Business Intelligence.
+- [ ] Read replicas and database scalability strategies.
+- [ ] Sharding.
+- [ ] Event Sourcing.
+- [ ] Consul for service discovery.
+- [ ] Vault for secrets and configuration management.
+- [ ] Migration to .NET Aspire.
+
+
+
 ## License
 
 MIT License
