@@ -14,12 +14,17 @@ namespace WalletSystem.Infrastructure.Persistence;
 public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
 
+    private readonly AuditingInterceptor _auditingInterceptor;
+    private readonly SoftDeleteInterceptor _softDeleteInterceptor;
+
     public ApplicationDbContext(
         DbContextOptions<ApplicationDbContext> options,
         AuditingInterceptor auditingInterceptor,
         SoftDeleteInterceptor softDeleteInterceptor) 
         : base(options)
     {
+        _auditingInterceptor = auditingInterceptor;
+        _softDeleteInterceptor = softDeleteInterceptor;
     }
 
     public DbSet<User> Users => Set<User>();
@@ -31,6 +36,8 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     {
         base.OnModelCreating(modelBuilder);
 
+        modelBuilder.AddTransactionalOutboxEntities();
+        
         modelBuilder.ApplyConfiguration(new UserConfiguration());
         modelBuilder.ApplyConfiguration(new RefreshTokenConfiguration());
         modelBuilder.ApplyConfiguration(new WalletConfiguration());
@@ -49,6 +56,12 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
             // Index the flag field for performance optimization
             modelBuilder.Entity(entityType.ClrType).HasIndex(nameof(ISoftDeletableEntity.IsDeleted));
         }
+    }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        base.OnConfiguring(optionsBuilder);
+        optionsBuilder.AddInterceptors(_auditingInterceptor, _softDeleteInterceptor);
     }
 
     private static LambdaExpression ConvertFilterExpression(Type entityType)
